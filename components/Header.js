@@ -59,13 +59,12 @@ const HeaderLeft = styled.div`
 	flex-grow: 0;
 	align-items: center;
 	padding-left: 1rem;
-	padding-right: 1rem;
+	padding-right: 1.25rem;
 	min-width: 260px;
 
 	/* target all icons inside of header left*/
 	> .MuiSvgIcon-root {
 		margin-left: auto;
-		margin-right: 30px;
 	}
 
 	> a {

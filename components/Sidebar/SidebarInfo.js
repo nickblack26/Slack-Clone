@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import CreateIcon from '@material-ui/icons/Create';
 import {
 	ExpandMore,
-	Add,
 	InsertCommentRounded,
 	AddCircleRounded,
 	QuestionAnswerRounded,
@@ -11,6 +10,7 @@ import {
 	LayersRounded,
 	BookmarkBorderRounded,
 	MoreVertRounded,
+	CellWifiRounded,
 } from '@material-ui/icons/';
 import SidebarOption from './SidebarOption';
 import { doc, getDoc, orderBy, query } from 'firebase/firestore';
@@ -59,37 +59,52 @@ function SidebarInfo() {
 	return (
 		<SidebarContainer>
 			<SidebarTeamHeader>
-				<div>
-					<h2>{orgName}</h2>
-				</div>
-				<button>
+				<SidebarHeaderButtonWrap>
+					<SidebarHeaderInfo>
+						<SidebarHeaderButton>
+							<span>{orgName}</span>
+						</SidebarHeaderButton>
+					</SidebarHeaderInfo>
+				</SidebarHeaderButtonWrap>
+				<SidebarComposeButton>
 					<CreateIcon />
-				</button>
+				</SidebarComposeButton>
 			</SidebarTeamHeader>
 			<SidebarNavigation>
-				<SidebarOption Icon={InsertCommentRounded} title='Threads' />
-				<SidebarOption Icon={NotesRounded} title='All unreads' />
-				<SidebarOption Icon={QuestionAnswerRounded} title='All DMs' />
-				<SidebarOption
-					Icon={BookmarkBorderRounded}
-					title='Saved items'
-				/>
-				<SidebarOption Icon={LayersRounded} title='File browser' />
-				<SidebarOption Icon={MoreVertRounded} title='More' />
-				<SidebarOption Icon={ExpandMore} title='Channels' />
-				{channels?.map((channel) => (
+				<SidebarList>
 					<SidebarOption
-						key={channel.id}
-						id={channel.id}
-						title={channel.data().name}
+						Icon={InsertCommentRounded}
+						title='Threads'
 					/>
-				))}
-				<SidebarOption
-					Icon={AddCircleRounded}
-					addChannelOption
-					title='Add Channel'
-				/>
+					<SidebarOption Icon={NotesRounded} title='All unreads' />
+					<SidebarOption
+						Icon={QuestionAnswerRounded}
+						title='All DMs'
+					/>
+					<SidebarOption
+						Icon={BookmarkBorderRounded}
+						title='Saved items'
+					/>
+					<SidebarOption Icon={LayersRounded} title='File browser' />
+					<SidebarOption Icon={MoreVertRounded} title='More' />
+					<SidebarOption Icon={ExpandMore} title='Channels' />
+					{channels?.map((channel) => (
+						<SidebarOption
+							key={channel.id}
+							id={channel.id}
+							title={channel.data().name}
+						/>
+					))}
+					<SidebarOption
+						Icon={AddCircleRounded}
+						addChannelOption
+						title='Add Channel'
+					/>
+				</SidebarList>
 			</SidebarNavigation>
+			<SidebarToolbar>
+				<CellWifiRounded />
+			</SidebarToolbar>
 		</SidebarContainer>
 	);
 }
@@ -98,8 +113,10 @@ export default SidebarInfo;
 
 const SidebarContainer = styled.div`
 	display: flex;
-	width: 100%;
 	flex-direction: column;
+	min-height: 0;
+	min-width: 0;
+	height: 100%;
 
 	> .MuiSvgIcon-root {
 		padding: 8px;
@@ -108,41 +125,20 @@ const SidebarContainer = styled.div`
 		background-color: white;
 		border-radius: 999px;
 	}
-
-	> hr {
-		border: 1px solid var(--border-color);
-	}
 `;
 
 const SidebarTeamHeader = styled.div`
-	display: flex;
 	height: 50px;
-	align-items: center;
-	padding: 0rem 1rem;
+	font-size: 1.125rem;
 	border-bottom: 1px solid var(--border-color);
-
-	> div {
-		display: flex;
-		max-width: 100%;
-		flex: 0.7;
-	}
-
-	> div > h2 {
-		font-size: 1rem;
-		min-width: 0;
-		font-weight: 900;
-		text-overflow: ellipsis;
-		overflow: hidden;
-		white-space: nowrap;
-		display: block;
-	}
-
-	> button {
-		flex: 0.3;
-	}
+	position: relative;
+	display: flex;
+	align-items: stretch;
+	background-color: var(--slack-color);
+	color: #ffffff;
 
 	.MuiSvgIcon-root {
-		flex: 0.3
+		flex: 0.3;
 		font-size: 0.75rem;
 		background-color: white;
 		color: black;
@@ -153,5 +149,102 @@ const SidebarTeamHeader = styled.div`
 `;
 
 const SidebarNavigation = styled.div`
-	padding: 0.5rem 0rem;
+	height: 100%;
+	min-height: 0;
+	width: 100%;
+	font-size: 0.9rem;
+	flex: 1;
+	position: relative;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--slack-color);
+`;
+
+const SidebarList = styled.div`
+	flex: 1;
+	position: relative;
+	display: block;
+	height: 100%;
+`;
+
+const SidebarToolbar = styled.div``;
+
+const SidebarHeaderButtonWrap = styled.div`
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	padding-left: 1rem;
+	padding-right: 3rem;
+	background-clip: padding-box;
+	position: relative;
+	z-index: 1;
+	flex-direction: row-reverse;
+`;
+
+const SidebarHeaderInfo = styled.div`
+	flex: 1;
+	min-width: 0;
+	order: 1;
+`;
+
+const SidebarHeaderButton = styled.button`
+	display: flex;
+	align-items: center;
+	max-width: 100%;
+	padding-left: 4px;
+	margin-left: -4px;
+	background: none;
+	border: 0;
+	color: inherit;
+	font: inherit;
+	margin: 0;
+	line-height: inherit;
+	overflow: initial;
+	padding: 0;
+	text-align: initial;
+	vertical-align: initial;
+	cursor: pointer;
+
+	> span {
+		min-width: 0;
+		font-weight: 900;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		display: block;
+	}
+`;
+
+const SidebarComposeButton = styled.button`
+	border: 0;
+	font: inherit;
+	margin: 0;
+	line-height: inherit;
+	overflow: initial;
+	padding: 0;
+	text-align: initial;
+	vertical-align: initial;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	right: 16px;
+	bottom: 24px;
+	z-index: 3;
+	height: 34px;
+	width: 34px;
+	top: 8px;
+	background: #d1d2d3;
+	border-radius: 1rem;
+
+	> svg {
+		background-color: transparent !important;
+		padding: 0 !important;
+		flex: 1 !important;
+		color: black !important;
+		font-size: 1rem !important;
+	}
 `;

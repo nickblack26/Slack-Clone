@@ -5,10 +5,10 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { channelIdState } from '../../atoms/channelAtom';
 import { organizationIdState } from '../../atoms/organizationAtom';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 function SidebarOption({ Icon, title, addChannelOption, id }) {
 	const [channelId, setChannelId] = useRecoilState(channelIdState);
-
 	const orgId = useRecoilValue(organizationIdState);
 	const { data: session } = useSession();
 
@@ -42,14 +42,16 @@ function SidebarOption({ Icon, title, addChannelOption, id }) {
 		<SidebarOptionContainer
 			onClick={addChannelOption ? addChannel : selectChannel}
 		>
-			{Icon && <Icon fontSize='small' />}
+			{Icon && <Icon />}
 			{Icon ? (
 				<h3>{title}</h3>
 			) : (
-				<SidebarOptionChannel>
-					<span>#</span>
-					{title}
-				</SidebarOptionChannel>
+				<SidebarChannelLink href={`/client/${orgId}/${id}`}>
+					<SidebarChannel>
+						<span>#</span>
+						{title}
+					</SidebarChannel>
+				</SidebarChannelLink>
 			)}
 		</SidebarOptionContainer>
 	);
@@ -63,7 +65,9 @@ const SidebarOptionContainer = styled.div`
 	align-items: center;
 	cursor: pointer;
 	opacity: 0.75;
-	padding: 0.5rem 1rem;
+	height: 2rem;
+	padding: 0rem 1rem;
+	color: var(--text-color);
 
 	> .MuiSvgIcon-root {
 		font-size: 0.9rem;
@@ -77,12 +81,14 @@ const SidebarOptionContainer = styled.div`
 	}
 
 	> h3 > span {
-		margin-left: 1.25rem;
-		padding-right: 0.25rem;
+		padding: 0rem 1rem;
+		padding-right: 0.5rem;
 	}
 `;
 
-const SidebarOptionChannel = styled.h3`
+const SidebarChannelLink = styled(Link)``;
+
+const SidebarChannel = styled.h3`
 	font-weight: 500;
 	text-transform: lowercase;
 `;

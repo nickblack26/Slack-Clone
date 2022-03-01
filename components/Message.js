@@ -30,7 +30,7 @@ function Message({ id, message, created, user }) {
 	return (
 		<MessageContainer>
 			{userData.image ? (
-				<MessageImage src={userData.image} height={40} width={40} />
+				<MessageImage src={userData.image} height={36} width={36} />
 			) : null}
 			<div>
 				<SenderInfo>
@@ -42,7 +42,7 @@ function Message({ id, message, created, user }) {
 						})}
 					</MessageDate>
 				</SenderInfo>
-				<p>{message}</p>
+				<MessageText>{message}</MessageText>
 			</div>
 			<MessageActionsWrap>
 				<MessageAction id={id} Icon={InsertComment} threadOption />
@@ -53,6 +53,10 @@ function Message({ id, message, created, user }) {
 }
 
 export default Message;
+
+const MessageText = styled.p`
+	font-size: 15px;
+`;
 
 const MessageActionsWrap = styled.div`
 	visibility: hidden;
@@ -85,7 +89,7 @@ const MessageContainer = styled.div`
 	}
 
 	:hover {
-		background-color: #1f2124;
+		background-color: var(--secondary-hover-color);
 	}
 	:hover ${MessageActionsWrap} {
 		visibility: visible;
@@ -101,10 +105,14 @@ const MessageContainer = styled.div`
 const SenderInfo = styled.div`
 	display: flex;
 	align-items: flex-end;
+
+	> h4 {
+		font-size: 15px;
+	}
 `;
 
 const MessageDate = styled.p`
-	font-size: 0.8rem;
+	font-size: 12px;
 	margin-left: 0.5rem;
 	color: #636263;
 `;

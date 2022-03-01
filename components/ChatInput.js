@@ -9,8 +9,7 @@ import { useSession } from 'next-auth/react';
 
 function ChatInput({ channelName, channelId }) {
 	const organizationId = useRecoilValue(organizationIdState);
-	const organizationRef = doc(db, 'organizations', organizationId);
-	const channelsRef = doc(organizationRef, 'channels', channelId);
+
 	const { data: session } = useSession();
 
 	const {
@@ -19,7 +18,10 @@ function ChatInput({ channelName, channelId }) {
 		resetField,
 		formState: { errors },
 	} = useForm();
+
 	const onSubmit = async (data) => {
+		const organizationRef = doc(db, 'organizations', organizationId);
+		const channelsRef = doc(organizationRef, 'channels', channelId);
 		resetField('message');
 		if (!channelId) {
 			return false;
@@ -34,18 +36,24 @@ function ChatInput({ channelName, channelId }) {
 
 	return (
 		<ChatInputContainer>
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<input
-					placeholder={`Send a message to #${channelName}`}
-					{...register('message', { required: true })}
-				/>
+			<ChatInputContent>
+				<div>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<input
+							placeholder={`Send a message to #${channelName}`}
+							{...register('message', { required: true })}
+						/>
 
-				{errors.exampleRequired && <span>This field is required</span>}
+						{errors.exampleRequired && (
+							<span>This field is required</span>
+						)}
 
-				<Button hidden type='submit'>
-					SEND
-				</Button>
-			</form>
+						<Button hidden type='submit'>
+							SEND
+						</Button>
+					</form>
+				</div>
+			</ChatInputContent>
 		</ChatInputContainer>
 	);
 }
@@ -53,18 +61,31 @@ function ChatInput({ channelName, channelId }) {
 export default ChatInput;
 
 const ChatInputContainer = styled.div`
-	> form {
+	position: relative;
+	z-index: 200;
+	margin-bottom: 75px;
+`;
+
+const ChatInputContent = styled.div`
+	display: flex;
+	padding: 0 1rem;
+	flex: 1;
+
+	> div {
+		flex: 1;
+	}
+
+	> div > form {
+		width: 100%;
 		position: relative;
 		display: flex;
 		justify-content: center;
 		z-index: 1;
-		background-color: var(--main-content);
+		border-radius: 0.5rem;
 	}
 
-	> form > input {
-		position: fixed;
-		bottom: 2rem;
-		width: 60%;
+	> div > form > input {
+		width: 100%;
 		border: 1px solid #4c4e4c;
 		border-radius: 0.5rem;
 		padding: 1rem;
@@ -72,16 +93,8 @@ const ChatInputContainer = styled.div`
 		background-color: #1f2124;
 		color: white;
 	}
-	> form > textarea {
-		position: fixed;
-		bottom: 2rem;
-		width: 75%;
-		border-radius: 0.5rem;
-		padding: 1rem;
-		outline: none;
-	}
 
-	> form > button {
+	> div > form > button {
 		display: none !important;
 	}
 `;

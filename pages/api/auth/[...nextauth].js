@@ -14,6 +14,9 @@ export default NextAuth({
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 		}),
 	],
+	pages: {
+		signIn: '/signin',
+	},
 	secret: 'PLACE-HERE-ANY-STRING',
 	callbacks: {
 		session: async (session) => {

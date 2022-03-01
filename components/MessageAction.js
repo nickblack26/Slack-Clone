@@ -38,7 +38,7 @@ const MessageActionContainer = styled.div`
 	cursor: pointer;
 	border-radius: 0.25rem;
 	:hover {
-		background-color: var(--hover-color);
+		background-color: var(--secondary-hover-color);
 	}
 	> .MuiSvgIcon-root {
 		font-size: 1rem;
