@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Chat from '../components/Chat';
 import { useSession } from 'next-auth/react';
-import Login from './login';
 import { db } from '../firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import Signin from './signin';
+import { getProviders } from 'next-auth/react';
 
-export default function Home() {
+export default function Home({ providers }) {
 	const { data: session } = useSession();
 	const [orgs, setOrgs] = useState([]);
 
@@ -41,7 +42,7 @@ export default function Home() {
 					</AppBody>
 				</>
 			) : (
-				<Login />
+				<Signin providers={providers} />
 			)}
 		</>
 	);
@@ -55,3 +56,13 @@ const AppBody = styled.div`
 	grid-template-columns: 260px auto;
 	height: 100vh;
 `;
+
+export async function getServerSideProps() {
+	const providers = await getProviders();
+
+	return {
+		props: {
+			providers,
+		},
+	};
+}
