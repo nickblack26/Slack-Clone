@@ -45,16 +45,6 @@ const Signin = ({ providers }) => {
 
 export default Signin;
 
-export async function getServerSideProps() {
-	const providers = await getProviders();
-
-	return {
-		props: {
-			providers,
-		},
-	};
-}
-
 const SignInContainer = styled.div`
 	display: flex;
 	flex-direction: column;
