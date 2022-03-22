@@ -1,34 +1,21 @@
 import styled from 'styled-components';
-import { db } from '../../firebase';
-import { collection, addDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { channelIdState } from '../../atoms/channelAtom';
 import { organizationIdState } from '../../atoms/organizationAtom';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { addChannel } from '../../helpers/helpers';
+import { useSession } from 'next-auth/react';
 
 function SidebarOption({ Icon, title, addChannelOption, id }) {
-	const [channelId, setChannelId] = useRecoilState(channelIdState);
 	const orgId = useRecoilValue(organizationIdState);
+	const [channelId, setChannelId] = useRecoilState(channelIdState);
 	const { data: session } = useSession();
 
-	const addChannel = async () => {
+	const newChannel = () => {
 		const channelName = prompt('Please enter the channel name');
-
 		if (channelName) {
-			const orgRef = doc(db, 'organizations', orgId);
-			const channelRef = await addDoc(collection(orgRef, 'channels'), {
-				name: channelName,
-				created: serverTimestamp(),
-			});
-
-			await addDoc(collection(channelRef, 'messages'), {
-				created: serverTimestamp(),
-				message: `joined #${channelName}`,
-				user: `${session.token.email}`,
-			});
-
-			setChannelId(channelRef.id);
+			const data = addChannel(orgId, channelName, session);
+			data.then((res) => setChannelId(res));
 		}
 	};
 
@@ -40,7 +27,7 @@ function SidebarOption({ Icon, title, addChannelOption, id }) {
 
 	return (
 		<SidebarOptionContainer
-			onClick={addChannelOption ? addChannel : selectChannel}
+			onClick={addChannelOption ? newChannel : selectChannel}
 		>
 			{Icon && <Icon />}
 			{Icon ? (

@@ -22,10 +22,10 @@ function Header() {
 			</HeaderSearchContainer>
 			<HeaderRight>
 				<HelpOutlineIcon />
-				{session ? (
+				{/* {session ? (
 					<a onClick={signOut}>
 						<ImageAvatar
-							src={`${session?.token.picture}`}
+							src={`${session?.token?.picture}`}
 							height={28}
 							width={28}
 						/>
@@ -34,7 +34,7 @@ function Header() {
 					<a onClick={signIn}>
 						<HeaderAvatar />
 					</a>
-				)}
+				)} */}
 			</HeaderRight>
 		</HeaderContainer>
 	);

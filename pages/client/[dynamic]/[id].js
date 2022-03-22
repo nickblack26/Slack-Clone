@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Chat from '../../../components/Chat';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import styled from 'styled-components';
 import Head from 'next/head';
 import Header from '../../../components/Header';
-import { db } from '../../../firebase';
-import {
-	doc,
-	getDoc,
-	onSnapshot,
-	query,
-	collection,
-	orderBy,
-} from 'firebase/firestore';
 import { useRecoilState } from 'recoil';
 import { organizationIdState } from '../../../atoms/organizationAtom';
 import { channelIdState } from '../../../atoms/channelAtom';
+import { useRouter } from 'next/router';
+
+import {
+	collection,
+	doc,
+	getDoc,
+	onSnapshot,
+	orderBy,
+	query,
+} from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 const Org = () => {
 	const router = useRouter();
@@ -51,7 +52,6 @@ const Org = () => {
 		);
 
 		onSnapshot(q, (snapshot) => {
-			console.log('Channel Messages =>', snapshot.docs);
 			setOrgChannelMessages(snapshot.docs);
 		});
 	};
@@ -76,9 +76,8 @@ const Org = () => {
 	}, [router.isReady]);
 
 	useEffect(() => {
-		getChannelName().catch((err) => console.error(err));
-		getChannelMessages().catch((err) => console.error(err));
-		console.log('channel changed');
+		getChannelName(orgId, channelId).catch((err) => console.error(err));
+		getChannelMessages(orgId, channelId).catch((err) => console.error(err));
 	}, [channelId]);
 
 	return (

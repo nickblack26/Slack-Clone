@@ -1,24 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DeleteOutlineOutlined, Delete } from '@material-ui/icons';
-import { db } from '../firebase';
+import { Delete } from '@material-ui/icons';
 import { organizationIdState } from '../atoms/organizationAtom';
 import { channelIdState } from '../atoms/channelAtom';
 import { useRecoilValue } from 'recoil';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteMessage } from '../helpers/helpers';
 
 function DeleteMessage({ id }) {
 	const orgId = useRecoilValue(organizationIdState);
 	const channelId = useRecoilValue(channelIdState);
 
-	const deleteMessage = async () => {
-		const orgRef = doc(db, 'organizations', orgId);
-		const channelRef = doc(orgRef, 'channels', channelId);
-		await deleteDoc(doc(channelRef, 'messages', id));
+	const byeMessage = async () => {
+		deleteMessage(orgId, channelId, id);
 	};
 
 	return (
-		<DeleteMessageContainer onClick={deleteMessage}>
+		<DeleteMessageContainer onClick={byeMessage}>
 			<Delete fontSize='medium' />
 		</DeleteMessageContainer>
 	);

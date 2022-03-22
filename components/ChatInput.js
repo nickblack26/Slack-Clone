@@ -1,17 +1,15 @@
 import { Button } from '@material-ui/core';
-import { addDoc, doc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { organizationIdState } from '../atoms/organizationAtom';
-import { db } from '../firebase';
 import { useForm } from 'react-hook-form';
+import { sendMessage } from '../helpers/helpers';
 import { useSession } from 'next-auth/react';
 
 function ChatInput({ channelName, channelId }) {
-	const organizationId = useRecoilValue(organizationIdState);
-
 	const { data: session } = useSession();
 
+	const organizationId = useRecoilValue(organizationIdState);
 	const {
 		register,
 		handleSubmit,
@@ -20,18 +18,9 @@ function ChatInput({ channelName, channelId }) {
 	} = useForm();
 
 	const onSubmit = async (data) => {
-		const organizationRef = doc(db, 'organizations', organizationId);
-		const channelsRef = doc(organizationRef, 'channels', channelId);
+		const { message } = data;
+		sendMessage(organizationId, channelId, message, session);
 		resetField('message');
-		if (!channelId) {
-			return false;
-		}
-
-		await addDoc(collection(channelsRef, 'messages'), {
-			message: data.message,
-			created: serverTimestamp(),
-			user: `${session?.token.email}`,
-		});
 	};
 
 	return (

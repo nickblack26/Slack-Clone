@@ -1,24 +1,10 @@
 import { ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 import ChatInput from './ChatInput';
-import React, { useLayoutEffect, useState } from 'react';
+import React from 'react';
 import Message from './Message';
 
 function Chat({ channelId, channelName, messages }) {
-	const [height, setHeight] = useState(undefined);
-
-	const calcHeight = () => {
-		let header = document.getElementById('messages');
-		let headerHeight = header.clientHeight;
-		return headerHeight;
-	};
-
-	useLayoutEffect(() => {
-		const calculatedHeight = calcHeight();
-		console.log(calculatedHeight);
-		setHeight(calculatedHeight);
-	}, []);
-
 	return (
 		<ChatContainer>
 			<ChatContent>
@@ -34,40 +20,20 @@ function Chat({ channelId, channelName, messages }) {
 					<div style={{ display: 'contents' }}>
 						<MessagesWrap id='messages'>
 							<MessagesPane>
-								<div
-									style={{
-										overflow: 'hidden',
-										height: `${height}`,
-									}}
-								>
-									<div
-										style={{
-											overflowY: 'scroll',
-											overflowX: 'hidden',
-											height: '100%',
-										}}
-									>
-										<div style={{ height: `${height}` }}>
-											{messages?.map((aMessage) => {
-												const { id } = aMessage;
-												const {
-													message,
-													created,
-													user,
-												} = aMessage.data();
-												return (
-													<Message
-														key={id}
-														id={id}
-														message={message}
-														created={created}
-														user={user}
-													/>
-												);
-											})}
-										</div>
-									</div>
-								</div>
+								{messages?.map((aMessage) => {
+									const { id } = aMessage;
+									const { message, created, user } =
+										aMessage.data();
+									return (
+										<Message
+											key={id}
+											id={id}
+											message={message}
+											created={created}
+											user={user}
+										/>
+									);
+								})}
 							</MessagesPane>
 						</MessagesWrap>
 						<div id='input'>

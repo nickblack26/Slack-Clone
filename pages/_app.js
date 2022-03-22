@@ -4,7 +4,7 @@ import { SessionProvider } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { lightTheme, darkTheme, GlobalStyles } from '../styles/Themes';
 
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps: { session, ...pageProps } }) {
 	const [theme, setTheme] = useState('light');
 
 	useEffect(() => {
@@ -16,7 +16,7 @@ export default function App({ Component, pageProps }) {
 
 	return (
 		<>
-			<SessionProvider session={pageProps.session}>
+			<SessionProvider session={session}>
 				<RecoilRoot>
 					<ThemeProvider
 						theme={theme === 'light' ? lightTheme : darkTheme}
@@ -29,3 +29,5 @@ export default function App({ Component, pageProps }) {
 		</>
 	);
 }
+
+export default App;
