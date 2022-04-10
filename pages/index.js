@@ -15,6 +15,8 @@ export async function getServerSideProps(context) {
 
 export default function Home({ providers }) {
 	const { status } = useSession();
+	const session = useSession();
+	console.log(session);
 
 	return (
 		<>

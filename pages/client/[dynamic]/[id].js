@@ -18,8 +18,19 @@ import {
 	query,
 } from 'firebase/firestore';
 import { db } from '../../../firebase';
+import { getSession } from 'next-auth/react';
 
-const Org = () => {
+export async function getServerSideProps(context) {
+	const session = getSession(context);
+	const data = JSON.parse(JSON.stringify(session));
+
+	return {
+		props: { data },
+	};
+}
+
+const Org = ({ data }) => {
+	console.log(data);
 	const router = useRouter();
 	const [orgInfo, setOrgInfo] = useState({});
 	const [orgId, setOrgId] = useRecoilState(organizationIdState);
